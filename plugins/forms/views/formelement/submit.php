@@ -1,0 +1,1 @@
+<input type="submit" name="<?=$name;?>" value="<?=isset($label) ? $label : $value;?>"/>

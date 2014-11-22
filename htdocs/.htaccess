@@ -1,0 +1,29 @@
+# Options +FollowSymLinks -MultiViews
+# Turn mod_rewrite on
+RewriteEngine On
+RewriteBase /
+
+#RewriteCond %{HTTP_HOST} ^clarksirl.co.uk
+#RewriteRule (.*) http://www.clarksirl.co.uk/$1 [R=301,L]
+RewriteCond %{REQUEST_URI} !(/$|\.) 
+RewriteRule (.*) %{REQUEST_URI}/ [R=301,L] 
+
+#Custom page redirects
+
+RewriteCond %{REQUEST_FILENAME} -d [OR]
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -l
+RewriteRule ^ - [L]
+
+RewriteRule ^file/get/(.*)$ index.php?route=file/get/$1&opformat=file
+RewriteRule ^ajax/([^.]*)$ index.php?route=$1&opformat=ajax [L,QSA,NC]
+RewriteRule ^([^.]*)$ index.php?route=$1 [L,QSA,NC]
+
+RewriteRule ^admin$ index.php?route=admin [L,QSA,NC]
+RewriteRule ^ajax/admin/([^.]*)$ index.php?route=admin/$1&opformat=ajax [L,QSA,NC]
+RewriteRule ^admin/([^.]*)$ index.php?route=admin/$1 [L,QSA,NC]
+
+RewriteRule ^css/theme.css$ resources.php?type=themecss
+RewriteRule ^css/theme/([^.]*)\.css$ resources.php?type=themecss&theme=$1
+RewriteRule ^([^.]*)/resources/page.css$ resources.php?route=$1&type=css
+RewriteRule ^([^.]*)/resources/page.js$ resources.php?route=$1&type=js
