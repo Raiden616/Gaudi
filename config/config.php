@@ -4,9 +4,7 @@ define ("DEV","true");
 define ("DEBUG","true");
 
 if (DEV == "false") {
-/* Live site settings */
-	define("SITEURL","http://www.clarksirl.co.uk");
-	define("SERROOT","/home/web");
+/* Live database settings */
 	
 	//DB Authentication
 	define("DB_HOST","127.0.0.1");
@@ -15,9 +13,7 @@ if (DEV == "false") {
 	define("DB_NAME","sqldatabase");
 	
 } else if (DEV == "true") {
-/* Development site settings */
-	define("SITEURL","http://gaudi3.local");
-	define("SERROOT","/Users/clark/Google Drive/Development/Gaudi_mk3");
+/* Development database settings */
 	
 	//DB Authentication
 	define("DB_HOST","");
@@ -27,6 +23,7 @@ if (DEV == "false") {
 }
 
 /* System configuration */
+define("SERROOT",getcwd()."/..");
 define("URLROOT","/");
 define("TIMEZONE","UTC");
 	$directory_self = str_replace(basename($_SERVER['PHP_SELF']), '', $_SERVER['PHP_SELF']);

@@ -3,7 +3,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 <meta name="viewport" content="width=device-width, user-scalable=false;">
-<meta property="og:image" content="<?=SITEURL;?>/images/logo.png" />
+<meta property="og:image" content="http://<?=$_SERVER['SERVER_NAME'];?>/images/logo.png" />
 <title><?=htmlentities($title);?> - <?=SITETITLE;?></title>
 <meta name="description" content="<?=htmlentities($description);?>" />
 <?php
