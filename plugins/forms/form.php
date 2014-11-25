@@ -72,11 +72,14 @@ class Form extends View {
          * 
          */
         public function render($opFormat = 'html') {
+            // Create the wrapper view
+            $wrap = new View('form');
+            
             // Assign the basic form metadata
-            $this->assign('name',$this->name);
-            $this->assign('method',$this->method);
-            $this->assign('action',is_null($this->action) ? $_SERVER['REQUEST_URI'] : $this->action);
-            $this->assign('form_id',$this->formID);
+            $wrap->assign('name',$this->name);
+            $wrap->assign('method',$this->method);
+            $wrap->assign('action',is_null($this->action) ? $_SERVER['REQUEST_URI'] : $this->action);
+            $wrap->assign('form_id',$this->formID);
             
             // Next make sure the elements show their most up-to-date values
             foreach ($this->elements as $e) {
@@ -84,9 +87,10 @@ class Form extends View {
             }
             $this->assign('elements',$this->elements);
             
+            $wrap->assign('form',parent::render());
             
             
-            return parent::render('html');
+            return $wrap->render();
         }
         
         /**

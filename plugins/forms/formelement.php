@@ -32,7 +32,7 @@ abstract class FormElement extends View {
     protected $validators = array();
     
     public function __construct($name,$view = 'formelement/input') {
-        $this->name = $name;
+        $this->name = htmlentities($name);
         
         // Do the view
         parent::__construct($view);
@@ -45,7 +45,7 @@ abstract class FormElement extends View {
      * Set the label for the form element
      */
     public function label($string) {
-        $this->label = $string;
+        $this->label = htmlentities($string);
     }
     
     /**
@@ -55,7 +55,7 @@ abstract class FormElement extends View {
      * Set the value of this form element
      */
     public function value($string) {
-        $this->value = $string;
+        $this->value = htmlentities($string);
     }
     
     /**
@@ -139,7 +139,7 @@ class Input extends FormElement {
      * Set the placeholder for the form element
      */
     public function placeholder($string) {
-        $this->placeholder = $string;
+        $this->placeholder = htmlentities($string);
     }
     
     public function render($opFormat = 'html') {
@@ -148,11 +148,73 @@ class Input extends FormElement {
     }
 }
 
+class TextArea extends Input {
+    function __construct($name,$view = "formelement/textarea") {
+        parent::__construct($name,$view);
+    }
+}
+
 class Submit extends FormElement {
     function __construct($name,$view = "formelement/submit") {
         parent::__construct($name,$view);
         
         $this->label = "Submit";    // Default button text
+    }
+}
+
+class Select extends FormElement {
+    protected $options = array();
+    
+    function __construct($name,$view = "formelement/select") {
+        parent::__construct($name,$view);
+    }
+    
+    public function options(array $options) {
+        foreach ($options as $k => $v) {
+            if (is_array($v)) {
+                $v = reset($v);
+            }
+            
+            $this->addOption($v,$k);
+        }
+    }
+    
+    /**
+     * 
+     * @param type $value
+     * @param type $key (optional)
+     * @return type
+     * 
+     * Add an option to this select element.
+     * Returns the key of the newly inserted element
+     */
+    public function addOption($value,$key = null) {
+        if (is_null($key)) {
+            $this->options[] = htmlentities($value);
+            return count($this->options)-1;
+        } else {
+            $this->options[htmlentities($key)] = htmlentities($value);
+            return $key;
+        }
+    }
+    
+    /**
+     * 
+     * @param type $oldKey
+     * @param type $newKey
+     * 
+     * Alter the key value of an existing array element
+     */
+    public function setKey($oldKey,$newKey) {
+        if (isset($this->options[htmlentities($oldKey)])) {
+            $this->options[htmlentities($newKey)] = $this->options[htmlentities($oldKey)];
+            unset($this->options[htmlentities($oldKey)]);
+        }
+    }
+    
+    public function render($opFormat = 'html') {
+        $this->assign('options',$this->options);
+        return parent::render($opFormat);
     }
 }
 

@@ -29,10 +29,19 @@ class Controller_Index {
         
         $form = new Form("testForm");
         
-        $e = new Input('test');
+        $e = new Input('input');
         $e->label("Test field");
         $e->required();
         $e->placeholder("Test input");
+        $form->addElement($e);
+        
+        $e = new TextArea('textarea');
+        $e->placeholder("Text texarea input");
+        $form->addElement($e);
+        
+        $e = new Select('select');
+        $e->label("Select field");
+        $e->options(array('test','test2'));
         $form->addElement($e);
         
         $e = new Submit('submit');
