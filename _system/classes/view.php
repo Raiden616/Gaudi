@@ -91,10 +91,7 @@ class View extends System_Controller_Response {
          */
         public function getArray() {
             // First render view to get HTML contents
-            ob_start();
-            $this->render('html');
-            $content = ob_get_contents();
-            ob_end_clean();
+            $content = $this->render('html');
             
             // If we have included a view as a value in this view,
             // then recursively get each as an array
@@ -222,10 +219,7 @@ class Page extends View {
         
         public function getArray() {
             // First render view to get HTML contents
-            ob_start();
-            parent::render('html');
-            $content = ob_get_contents();
-            ob_end_clean();
+            $content = parent::render('html');
             
             // If we have included a view as a value in this view,
             // then recursively get each as an array
@@ -233,6 +227,10 @@ class Page extends View {
             foreach ($retData as $k => $v) {
                 if ($retData[$k] instanceof View) {
                     $retData[$k] = $retData[$k]->getArray();
+                } else if ($k == 'content') {   // This is content
+                    // The "content" key in view data is reserved,
+                    // and thus not parsed out
+                    unset($retData[$k]);
                 }
             }
             

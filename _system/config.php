@@ -26,6 +26,7 @@ define ("DIRROOT",$_SERVER['DOCUMENT_ROOT'].$directory_self);
 define ("WEBROOT","htdocs");
 define ("UPLOADDIR",SERROOT."/uploads");
 define ("MODEL_DIR","models");
+define ("VIEW_DIR",SERROOT."/views");
 
 /* SQL Settings */
 	// Set the databsae engine to one of the following supported engines:

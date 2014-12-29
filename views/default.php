@@ -1,6 +1,8 @@
 <div class="row">
 <div class="large-12 columns">
-<h1><?=isset($heading) && !empty($heading) ? $heading : '';?></h1>
+<? if (isset($heading) && !empty($heading)): ?>
+    <h1><?=$heading;?></h1>
+<? endif; ?>
 
 <?=isset($content) && !empty($content) ? $content : '';?>
 

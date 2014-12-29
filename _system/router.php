@@ -44,7 +44,7 @@ class Router {
                 //  - boolean: assemble an appropriate response object and render it
                 $controllerOutput = $this->loadRoute($expRoute);
                 
-            } else {    // Not a set route, so try and match it to a page in the model
+            } else {    // Not a set route, so try and match it to a file or database -stored view
                 
                 // Only do this if we are not in the CMS
                 if (!self::isCMS()) {   // It is not the CMS
@@ -75,6 +75,18 @@ class Router {
                         
                         $controllerOutput = $page;
                         
+                    } else {    // No db page found, so look in the flat-file
+                        $file = VIEW_DIR."/pages/$route.php";
+                        $indexFile = VIEW_DIR."/pages/$route/index.php";
+                        if (file_exists($file) && is_readable($file)) {
+                            $page = new Page();
+                            $page->assign('content',file_get_contents($file));
+                            $controllerOutput = $page;
+                        } else if (file_exists($indexFile) && is_readable($indexFile)) {
+                            $page = new Page();
+                            $page->assign('content',file_get_contents($indexFile));
+                            $controllerOutput = $page;
+                        }
                     }
                 }
                 
