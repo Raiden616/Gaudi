@@ -20,7 +20,8 @@
 // Start session
 session_start();
 
-// Include system configuration
+// Include configuration
+require_once('../_system/config.php');
 require_once('../config/config.php');
 chdir(SERROOT); // Move to the server route, as defined in config.php
 
@@ -77,19 +78,21 @@ $router = new Router();
 // Handle the CMS
 if (GROUP == CMSROUTE) {
 	// If this is an admin route, load the cms instead
-	chdir("_cms"); // Switch to CMS directory
-	// Reform route
-	$newRoute = array();
-	foreach ($r as $k => $v) {
-		if ($k != 0) {
-			$newRoute[$k-1] = $v;
-		}
-	}
-	if (empty($newRoute)) {
-		$newRoute[0] = "index";
-	}
-	$r = $newRoute;
-	$route = implode("/",$r);
+        if (is_dir("_cms")) {
+            chdir("_cms"); // Switch to CMS directory
+            // Reform route
+            $newRoute = array();
+            foreach ($r as $k => $v) {
+                    if ($k != 0) {
+                            $newRoute[$k-1] = $v;
+                    }
+            }
+            if (empty($newRoute)) {
+                    $newRoute[0] = "index";
+            }
+            $r = $newRoute;
+            $route = implode("/",$r);
+        }
 }
 
 define ("ROUTE",$route);

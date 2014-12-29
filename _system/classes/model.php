@@ -228,16 +228,16 @@ abstract class SuperModel extends ArrayObject {
     
     // CRUD methods
     abstract public function save();
-    abstract public function read($searchVal,$searchField);
+    abstract public function read($val,$attr);
     abstract public function delete();
     
-    public static function readAll($searchVal = null) {
+    public static function readAll($val = null) {
         $array = array();
 
         $curClass = get_called_class(); // Get name of current class
 
         $o = new $curClass(); // Create instance of whatever class we are in
-        while ($o->read($searchVal)) { // read() will get results as an array of objects
+        while ($o->read($val)) { // read() will get results as an array of objects
                 // We have to add a clone of the object to the array, otherwise further
                 // reads will affect the ones already in there.
                 $array[] = clone $o; 
@@ -246,13 +246,13 @@ abstract class SuperModel extends ArrayObject {
         return $array;
     }
 
-    public static function readAllArray($searchVal = null) {
+    public static function readAllArray($val = null) {
         $array = array();
 
         $curClass = get_called_class(); // Get name of current class
 
         $o = new $curClass(); // Create instance of whatever class we are in
-        while ($o->read($searchVal)) { // read() will get results as an array of objects
+        while ($o->read($val)) { // read() will get results as an array of objects
                 $array[] = $o->toArray();
         }
 

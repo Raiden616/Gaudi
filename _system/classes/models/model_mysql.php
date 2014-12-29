@@ -199,8 +199,8 @@ class Model extends SuperModel{
     /**
      * Read data from saved instance into this instantiation
      */
-    public function read($searchVal = null,$searchField = null) {
-        $searchField = is_null($searchField) ? $this->idField() : $searchField;
+    public function read($val = null,$attr = null) {
+        $attr = is_null($attr) ? $this->idField() : $attr;
         
         // The fields to get
         // If we are joining, then this will get a full list of all fields from all joined tables
@@ -214,35 +214,35 @@ class Model extends SuperModel{
 
         // If we have specified a value to search, then use it
         // First, we decide on the fields to search
-        if (is_null($searchField)) {    // Search field is null, use ID field
-            $searchField = $this->idField;
+        if (is_null($attr)) {    // Search field is null, use ID field
+            $attr = $this->idField;
         }
         
-        if (!is_null($searchVal)) {
+        if (!is_null($val)) {
             $qry .= " WHERE ";
         
             // If we are searching more than one field (including if no search
             // field has been specified, but we are using a composite primary key)
-            // then make sure we have passed in an array as searchVal.
+            // then make sure we have passed in an array as val.
             // If not, then error.
-            if (is_array($searchField)) {
-                if (!is_array($searchVal)   // Have not passed in array
+            if (is_array($attr)) {
+                if (!is_array($val)   // Have not passed in array
                         || 
-                   (is_array($searchVal) && count($searchVal) != count($searchField))) {    // Array passed, but count doesn't match
+                   (is_array($val) && count($val) != count($attr))) {    // Array passed, but count doesn't match
                     Error::_sysError("Cannot read from table {$this->tableName}; search value expected as valid array.");
                 }
                 // All good
                 $i = 0;
-                foreach ($searchField as $field) {
+                foreach ($attr as $field) {
                     if ($i > 0) {   $qry .= " AND ";    }
                     $qry .= "`$field` = '%s'";
                     $i++;
                 }
             } else {
-                if (is_array($searchVal)) {
-                    $searchVal = isset ($searchVal[0]) ? $searchVal[0] : "";
+                if (is_array($val)) {
+                    $val = isset ($val[0]) ? $val[0] : "";
                 }
-                $qry .= "`$searchField`  = '%s'";
+                $qry .= "`$attr`  = '%s'";
             }
         }
         
@@ -265,7 +265,7 @@ class Model extends SuperModel{
         }
         
         // Run the query
-        $qry = new MySQLQuery($qry,$searchVal);
+        $qry = new MySQLQuery($qry,$val);
         return $this->handleResults($qry);
     }
 

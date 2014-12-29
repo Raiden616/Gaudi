@@ -1,26 +1,21 @@
 <?php
-/* Site Settings */
-define ("DEV","true");
-define ("DEBUG","true");
 
-if (DEV == "false") {
-/* Live database settings */
-	
-	//DB Authentication
-	define("DB_HOST","127.0.0.1");
-	define("DB_USER","sqluser");
-	define("DB_PASS","sqlpass");
-	define("DB_NAME","sqldatabase");
-	
-} else if (DEV == "true") {
-/* Development database settings */
-	
-	//DB Authentication
-	define("DB_HOST","");
-	define("DB_USER","");
-	define("DB_PASS","");
-	define("DB_NAME","");
-}
+/* 
+ * Copyright (C) 2014 Clark Sirl
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
 /* System configuration */
 define("SERROOT",getcwd()."/..");
@@ -40,22 +35,14 @@ define ("DATABASE_ENGINE","MySQL");
 	// MSSQL-server specific settings
 define ("ODBC_DRIVER","SQL Server");	// ODBC driver to use in connection string
 
-/* Encryption settings */
-define("XTEA_KEY","40151ddfdd1a47ace976a476efdfcb5a");
-define("PASS_ALG","sha256");
-define("PASS_SALT","pdydJn6ECZ.CRRQs^W#pme9205Bxx,GD)j(-mxGHg5ED+");
-
 /* CMS SETTINGS */
-	// Ignore this section if you do not use the cms
 define ("CMSROUTE","admin");
-
-define("FB_APPID","304964039582113");
 
 /**
  * Class of methods to get and update configuration keys from database
  */
 class Configuration {
-	private static $keys = array(	// Define array of keys
+	private static $config = array(	// Define array of keys
 		"SITENAME" => "",
 		"SITETITLE" => "",
 		
@@ -72,7 +59,7 @@ class Configuration {
 	 * Function to update an individual key
 	 */
 	public static function update($key,$value) {
-		if (array_key_exists($key,self::$keys) && !empty($value)) {	// Restrict to those in pre-set array
+		if (array_key_exists($key,self::$config) && !empty($value)) {	// Restrict to those in pre-set array
 			$config = new Model("config","key");
 			$config['key'] = $key;
 			$config['val'] = $value;
@@ -86,7 +73,7 @@ class Configuration {
 	 * Get all config keys
 	 */
 	public static function getAll() {
-		$config = self::$keys;
+		$config = self::$config;
 	
 		$model = new Model('gaudi_system','key');
 		while ($model->read()) {
@@ -102,7 +89,7 @@ class Configuration {
 	 * Get the config value for an individual key
 	 */
 	public static function get($key) {
-		if (!array_key_exists($key,self::$keys)) {
+		if (!array_key_exists($key,self::$config)) {
 			return false;
 		}
 		
@@ -110,9 +97,16 @@ class Configuration {
 		if ($model->read($key)) {
 			return $model['val'];
 		} else {	// Doesn't exist in database, return default
-			return self::$keys[$key];
+			return self::$config[$key];
 		}
 	}
+        
+        /**
+         * Set the default value for a key
+         */
+        public static function set($key,$val) {
+            self::$config[$key] = $val;
+        }
 }
 
 ?>

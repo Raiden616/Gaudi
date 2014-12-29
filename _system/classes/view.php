@@ -21,9 +21,6 @@ class View extends System_Controller_Response {
 	protected $content;
 	
 	protected $file = false;
-	protected $view_dbTable = "gaudi_templates";
-	protected $view_idField = "name";
-	protected $contentField = "html";
 	
 	protected $data = array();
 	
@@ -170,10 +167,6 @@ class Page extends View {
                     );
 	protected $pageCSS = "";
 	protected $pageJS = "";
-	
-	protected $view_dbTable = "gaudi_pages";
-	protected $view_idField = "name";
-	protected $contentField = "content";
 	
 	//private $id = null;
 	private $name = null;

@@ -11,7 +11,7 @@ require_once('scripts.php');
 ?>
 </head>
 <body class="<?=htmlentities($bodyclass);?>">
-<? if (!empty(FB_APPID)): ?>
+<? if (defined('FB_APPID') && !empty(FB_APPID)): ?>
 <div id="fb-root"></div>
 <script type="text/javascript" language="javascript">(function(d, s, id) {
   var js, fjs = d.getElementsByTagName(s)[0];
