@@ -57,6 +57,24 @@ class Router {
                         // Assemble the page object to return using the derived parts
                         $page = new Page();
                         
+                        $page->header("title",$m['title']);
+                        $page->header("description",$m['meta_description']);
+                        $page->header("keywords",$m['meta_keywords']);
+                        
+                        $page->assign('heading',$m['title']);
+                        $page->assign('content',$m['html']);
+                        
+                        // Get the theme and apply theme information
+                        $theme = new Model('themes');
+                        if ($theme->read($m['theme_id'])) { // Read theme
+                            // Apply the wrapper elements
+                            foreach ($theme->wrapperElements as $we_k => $we_v) {
+                                $page->assignToWrapper($we_v['name'], $we_v['html']);
+                            }
+                        }
+                        
+                        $controllerOutput = $page;
+                        
                     }
                 }
                 
@@ -175,7 +193,7 @@ class Router {
 			return false;
 		}
 
-		return GROUP == CMSROUTE && (getcwd() == SERROOT."/".CMSDIR || getcwd() == SERROOT."\\".CMSDIR);
+		return GROUP == CMSROUTE && (getcwd() == SERROOT."/"."_cms" || getcwd() == SERROOT."\\"."_cms");
 	}
 	
 	public static function opFormat($check = null) {
